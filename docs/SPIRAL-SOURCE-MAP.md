@@ -42,3 +42,7 @@ A true port requires a target platform decision and actual C++/WASM or native ho
 ## Baseline preservation
 
 Original v0.1.0 docs, art and QA reference files remain in the integration ZIP. `BUILD-PROVENANCE.json` and `QA_REPORT.md` refer to the team's original v0.1.0 proof, not new v0.2 graphics tests.
+
+## v0.2.1 HAKUI movement/pose correction
+
+`js/hakui-embodiment.js` follows the canonical HAKUI **Movement → BodyPoseSolver → BodyConstraintSolver → BodyPoseState → renderer** ownership sequence. It adapts the native C++ body mechanics in JavaScript at CLONE’s visual scale, without linking native code or mutating persistent world state. Source reference: [HAKUI correction 02 pose/constraint code](https://github.com/spiraletech/hakui/tree/native/hakui-mannequin-correction-02-sully/src/body). The verified browser implementation is procedural grounded walking/sprinting, not authored animated assets or native foot IK.

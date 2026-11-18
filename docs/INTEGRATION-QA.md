@@ -16,3 +16,7 @@ Windows browser acceptance, native `exe` build, real WebGL frame rate, audio pla
 ## Known transition limits
 
 The HOME revision wrapper currently covers placement, move/interact/talk, and HAKUI quarter-cell crossing; legacy game clock/NPC state/notes/identity mutation is not fully represented as revision-stamped transactions. No signed GUFF authority receipts or AI reasoning backend are bundled.
+
+## v0.2.1 locomotion correction
+
+48/48 Node tests now pass. The new animation solver is a local JavaScript bridge and its offline GLES mesh exports report zero graphics errors; browser and Windows gait validation remain unverified. See `docs/LOCOMOTION-QA.md`.

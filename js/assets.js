@@ -29,7 +29,26 @@ function shell(zone){const a=[];b(a,0,0,-.18,12,10,.18,'#beb5a6',3);if(zone==='h
 for(const x of [.7,3.6,7]){b(a,x,.005,1.15,1.4,.04,1.06,'#d6e0dc');for(const dx of [0,.68,1.36])b(a,x+dx,.055,1.15,.035,.025,1.06,P.white);b(a,x,.055,1.67,1.4,.025,.03,P.white);}
 for(let j=0;j<12;j++){b(a,.01,.35+j*.23,.2,.035,.025,2.1,P.wood,1);}for(let z=.2;z<2.35;z+=.2)b(a,.01,.35,z,.035,2.65,.018,P.wood,1);
 }else{for(let y=0;y<10;y++)for(let x=0;x<12;x++)b(a,x+.01,y+.01,.001,.98,.98,.02,y>6?'#b6b8b1':'#859773',y>6?3:5);b(a,0,-.05,0,12,.05,1.2,'#b6bcb3',3);for(const x of [1,10])plant(a,x,1,0);}return a;}
-function player(s,t){const a=[],p=s.player,seat=s.items.find(i=>i.id===p.seat),lie=p.pose==='lie'||p.pose==='sleep',sit=seat&&!lie;let x=p.x/4,y=p.y/4,surface=0;if(seat){const r=C.rect(seat);x=(r.x+r.w/2)/4;y=(r.y+r.h*.65)/4;surface=seat.kind==='bed'?.64:.42;}const hip=sit?surface+.04:.65,shoulder=hip+.4,head=shoulder+.2;
+function solvedPlayer(s,pose){
+ const a=[],p=s.player,x=pose.position[0],y=pose.position[1],yaw=pose.yaw;
+ function limb(from,to,width,c,m=2){const dx=to[0]-from[0],dy=to[1]-from[1],dz=to[2]-from[2],len=Math.hypot(dx,dy,dz);
+  n(a,'cylinder',(from[0]+to[0])/2,(from[1]+to[1])/2,(from[2]+to[2])/2,width,width,Math.max(.001,len),c,m,[-Math.atan2(dy,Math.hypot(dx,dz)),Math.atan2(dx,dz),0]);}
+ n(a,'soft',x,y,pose.pelvis[2]+.16,.28,.19,.4,p.shirt,2,[0,0,yaw]);
+ ball(a,x,y,pose.head[2],.29,.28,.35,p.skin);
+ ball(a,x,y-.018,pose.head[2]+.10,.31,.28,.18,p.hair);
+ for(const [side,leg,arm] of [[-1,pose.leftLeg,pose.leftArm],[1,pose.rightLeg,pose.rightArm]]){
+  limb(leg.hip,leg.knee,.105,'#56615c');limb(leg.knee,leg.ankle,.09,'#56615c');
+  const fw=[Math.sin(yaw),Math.cos(yaw)];
+  n(a,'soft',leg.foot[0]+fw[0]*.04,leg.foot[1]+fw[1]*.04,leg.foot[2],.12,.21,.11,P.dark,2,[0,0,yaw]);
+  limb(arm.shoulder,arm.elbow,.10,p.shirt);limb(arm.elbow,arm.hand,.075,p.skin);
+  ball(a,...arm.hand,.08,.075,.09,p.skin);
+  if(side===1&&p.soda)cy(a,arm.hand[0],arm.hand[1]+.02,arm.hand[2]-.035,.08,.13,'#b87760',4);
+  ball(a,x+side*.055*Math.cos(yaw)+Math.sin(yaw)*.127,y-side*.055*Math.sin(yaw)+Math.cos(yaw)*.127,pose.head[2]+.02,.018,.012,.026,P.dark);
+ }
+ const floor=p.zone==='home'?.026:.021;for(const n of a)n.p[2]+=floor;
+ return a;
+}
+function player(s,t,pose){if(pose&&pose.valid&&s.player.pose==='stand')return solvedPlayer(s,pose);const a=[],p=s.player,seat=s.items.find(i=>i.id===p.seat),lie=p.pose==='lie'||p.pose==='sleep',sit=seat&&!lie;let x=p.x/4,y=p.y/4,surface=0;if(seat){const r=C.rect(seat);x=(r.x+r.w/2)/4;y=(r.y+r.h*.65)/4;surface=seat.kind==='bed'?.64:.42;}const hip=sit?surface+.04:.65,shoulder=hip+.4,head=shoulder+.2;
 function limb(from,to,width,c,m=2){const dx=to[0]-from[0],dy=to[1]-from[1],dz=to[2]-from[2],len=Math.hypot(dx,dy,dz);n(a,'cylinder',(from[0]+to[0])/2,(from[1]+to[1])/2,(from[2]+to[2])/2,width,width,len,c,m,[-Math.atan2(dy,Math.hypot(dx,dz)),Math.atan2(dx,dz),0]);}
 b(a,x-.14,y-.09,hip,.28,.18,.4,p.shirt,2);ball(a,x,y,head,.29,.28,.35,p.skin);ball(a,x,y-.018,head+.10,.31,.28,.18,p.hair);
 for(const side of [-1,1]){const legx=x+side*.085,knee=[legx,y+(sit?.27:.025),sit?surface+.04:.34],ankle=[legx,y+(sit?.38:0),.1];limb([legx,y,hip],knee,.105,'#56615c');limb(knee,ankle,.09,'#56615c');b(a,legx-.06,ankle[1],0,.12,.21,.085,P.dark,2);const sip=p.sip>0&&side===1,hand=[x+side*.17,y+(sip?.23:sit?.22:.02),sip?head-.06:sit?hip+.10:hip-.09],elbow=[x+side*.21,y+.07,shoulder-.19];limb([x+side*.17,y,shoulder-.025],elbow,.10,p.shirt);limb(elbow,hand,.075,p.skin);ball(a,...hand,.08,.075,.09,p.skin);if(side===1&&p.soda)cy(a,hand[0],hand[1]+.02,hand[2]-.035,.08,.13,'#b87760',4);ball(a,x+side*.055,y+.133,head+.02,.018,.012,.026,P.dark);}

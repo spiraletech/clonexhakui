@@ -2,7 +2,7 @@
 'use strict';const{test}=require('node:test'),assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs'),path=require('node:path');
 function boot(){const frames=[],events={},storage=new Map(),noop=()=>{},ctx=new Proxy({createImageData:(w,h)=>({data:new Uint8ClampedArray(w*h*4)})},{get:(o,k)=>k in o?o[k]:noop});const gl=new Proxy({getShaderParameter:()=>true,getProgramParameter:()=>true,checkFramebufferStatus:()=>1234,FRAMEBUFFER_COMPLETE:1234,getError:()=>0},{get:(o,k)=>k in o?o[k]:k.startsWith('create')?()=>({}):k.toUpperCase()===k?0:noop});
 class E{constructor(tag='div'){this.tag=tag;this.children=[];this.style={};this.classList={add:noop,remove:noop,toggle:noop};this.clientWidth=1400;this.clientHeight=1000;this.value='';this.open=false;}append(...v){this.children.push(...v);}replaceChildren(...v){this.children=v;}setAttribute(){}addEventListener(n,f){this['event'+n]=f;}getContext(k){return k==='webgl2'?gl:ctx;}before(){}remove(){}focus(){}click(){if(this.onclick)this.onclick();}showModal(){this.open=true;}close(){this.open=false;}querySelector(tag){return this.children.find(c=>c.tag===tag)||null;}getBoundingClientRect(){return{left:0,top:0};}}
-const ids={};for(const k of ['world','hint','panel','content','title','toast','close','life','spiral','bag','data','sound','pause','build','buildbar','buildlabel','rotate','cancelbuild','clock'])ids[k]=new E();const c={console,TextEncoder,URL,Uint8ClampedArray,Float32Array,Uint16Array,document:{getElementById:k=>ids[k],createElement:k=>new E(k),addEventListener:noop,hidden:false},localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},requestAnimationFrame:f=>frames.push(f),setTimeout:()=>1,clearTimeout:noop,devicePixelRatio:1,location:{reload:noop},Blob,addEventListener:(n,f)=>events[n]=f};c.window=c;vm.createContext(c);for(const n of ['core','renderer','assets','spiral-substrate','game'])vm.runInContext(fs.readFileSync(path.join(__dirname,'../js',n+'.js'),'utf8'),c,{filename:n+'.js'});return{C:c.CLONE,c,ids,frames,events,storage};}
+const ids={};for(const k of ['world','hint','panel','content','title','toast','close','life','spiral','bag','data','sound','pause','build','buildbar','buildlabel','rotate','cancelbuild','clock'])ids[k]=new E();const c={console,TextEncoder,URL,Uint8ClampedArray,Float32Array,Uint16Array,document:{getElementById:k=>ids[k],createElement:k=>new E(k),addEventListener:noop,hidden:false},localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},requestAnimationFrame:f=>frames.push(f),setTimeout:()=>1,clearTimeout:noop,devicePixelRatio:1,location:{reload:noop},Blob,addEventListener:(n,f)=>events[n]=f};c.window=c;vm.createContext(c);for(const n of ['core','renderer','hakui-embodiment','assets','spiral-substrate','game'])vm.runInContext(fs.readFileSync(path.join(__dirname,'../js',n+'.js'),'utf8'),c,{filename:n+'.js'});return{C:c.CLONE,c,ids,frames,events,storage};}
 test('shipped game UI boots dream, confirms identity, wakes and saves without script errors',()=>{const {C,c,ids,frames,storage}=boot();assert.equal(C.game.state.phase,'dream');assert.equal(ids.panel.open,true);const start=ids.content.children.find(n=>n.tag==='button'&&n.textContent==='REMEMBER MYSELF');assert.ok(start);start.click();assert.equal(C.game.state.phase,'waking');for(let k=0;k<60;k++)frames.shift()(k*50+50);assert.equal(C.game.state.phase,'playing');assert.equal(C.game.state.player.pose,'stand');assert.ok(storage.get('CLONE-home01'));assert.equal(c.CLONE_ERROR,undefined);});
 test('new-game build palette exposes bounded usable assets and placement preview flow',()=>{const {C,ids}=boot();C.game.state.phase='playing';ids.panel.close();ids.build.click();assert.equal(ids.title.textContent,'Place a household object');const r=ids.content.children.find(n=>n.tag==='div');assert.ok(r.children.some(n=>n.textContent==='Fridge'));r.children.find(n=>n.textContent==='House plant').click();assert.equal(ids.panel.open,false);assert.equal(ids.buildbar.hidden,false);});
 test('SPIRAL panel shows revision and applies only explicitly authorized GUFF advice',()=>{const {C,ids}=boot();
@@ -12,4 +12,24 @@ test('SPIRAL panel shows revision and applies only explicitly authorized GUFF ad
  proposal.click();assert.equal(C.game.state.items.length,initial,'proposal alone cannot alter HOME');
  const authorize=ids.content.children.find(n=>n.tag==='button'&&n.textContent==='AUTHORIZE PLANT PLACEMENT');assert.ok(authorize);authorize.click();
  assert.equal(C.game.state.items.length,initial+1);assert.equal(C.game.state.spiral.revision,1);assert.equal(C.game.state.spiral.audit.at(-1).actor,'GUFF');
+});
+
+test('keyboard locomotion advances faster than v0.2 and Shift sprint exceeds walk',()=>{
+ const {C,ids,frames,events}=boot();
+ C.game.state.phase='playing';ids.panel.close();C.game.state.player.zone='street';
+ C.game.state.player.x=30.5;C.game.state.player.y=22.5;
+ const p=C.game.state.player;
+ const key=(k)=>events.keydown({key:k,preventDefault:()=>{}}),up=k=>events.keyup({key:k});
+ // Eastward movement is collision-safe on the unoccupied street corridor.
+ key('d');let time=0;
+ for(let i=0;i<15;i++){time+=50;frames.shift()(time);}
+ const walk=Math.hypot(p.x-30.5,p.y-22.5);
+ assert.ok(walk>8.5,'Walking must noticeably exceed the old dt*9 = 6.75-cell baseline over 0.75s: '+walk);
+ up('d');for(let i=0;i<5;i++){time+=50;frames.shift()(time);}
+ C.game.state.player.x=30.5;C.game.state.player.y=22.5;
+ key('d');key('Shift');
+ for(let i=0;i<15;i++){time+=50;frames.shift()(time);}
+ const sprint=Math.hypot(p.x-30.5,p.y-22.5);
+ assert.ok(sprint>walk+4,`Sprint distance ${sprint} should exceed walk ${walk}`);
+ up('d');up('Shift');
 });

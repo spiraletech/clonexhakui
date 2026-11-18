@@ -1,10 +1,10 @@
-# CLONE × HAKUI — integration slice v0.2.0
+# CLONE × HAKUI — locomotion correction v0.2.1
 
 This folder is a playable **browser/WebGL2** adaptation of the handed-over CLONE v0.1.0 Home 01 build. It preserves the original scene art, asset assembly, 48 × 40 quarter-metre collision grid and save schema 1. It adds a compatibility substrate in `js/spiral-substrate.js` using selected, verified contracts from the SpiralOS repositories. **It does not compile, bundle, or execute the native C++ HAKUI, HOME, or GOLF-GUFF engines.** INOKUI's standalone repository currently contains a README only. See `docs/SPIRAL-SOURCE-MAP.md` for implementation provenance and the pending native bridge.
 
-**Play:** open `index.html` in a WebGL2 browser, or on Windows run `START-CLONE.cmd` with Node.js 20+ installed. New `SPIRAL` menu shows HOME revision/receipt history, HAKUI body checks, INOKUI read-only projection and a GUFF local adviser that can propose a plant placement. The action requires an explicit **AUTHORIZE** click; it is a deterministic local example, not an LLM or remote service.
+**Play:** open `index.html` in a WebGL2 browser, or on Windows run `START-CLONE.cmd` with Node.js 20+ installed. Move with **WASD / arrows**, hold **Shift** to sprint, or **click the floor** to pathfind. v0.2.1 drives grounded procedural gait, a HAKUI-style solved pose and foot contacts; the actual native C++ HAKUI animation runtime is **not** linked. New `SPIRAL` menu shows HOME revision/receipt history, HAKUI body checks, INOKUI read-only projection and a GUFF local adviser that can propose a plant placement. The action requires an explicit **AUTHORIZE** click; it is a deterministic local example, not an LLM or remote service.
 
-**Verify:** `node --test tests/*.test.cjs` runs 42 tests (30 retained original tests, 11 substrate integration tests, and 1 new UI acceptance test). This is Node/DOM-stub verification, **not** browser, audio, FPS or Windows acceptance. See `docs/INTEGRATION-QA.md`.
+**Verify:** `node --test tests/*.test.cjs` runs 48 tests (42 retained v0.2.0 baseline checks plus 6 locomotion/rig checks). This is Node/DOM-stub verification, **not** browser, audio, FPS or Windows acceptance. See `docs/INTEGRATION-QA.md` and `docs/LOCOMOTION-QA.md`.
 
 ---
 
@@ -25,7 +25,7 @@ browser save storage: export/import your life if changing launch method.
 
 ## Play
 Choose name/skin/hair/clothing in the opening dream, then REMEMBER MYSELF. A brief waking phase
-leads to player control. Click floor to walk; WASD/arrows move; click/right-click an item for its menu;
+leads to player control. Click floor to walk at 3.25 m/s; WASD/arrows move, hold Shift to sprint at 5.75 m/s; click/right-click an item for its menu;
 E uses the nearest primary action or stands up; Q sips held soda. Wheel changes zoom.
 Use LIFE LOG, POCKETS and SAVE / DATA from the header. Hidden tabs pause world simulation.
 SOUND is opt-in. Water/flush effects are short procedural sounds, not licensed recordings.

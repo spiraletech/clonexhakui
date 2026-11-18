@@ -1,0 +1,345 @@
+{
+  "project": "CLONE",
+  "version": "0.1.0",
+  "milestone": "Home 01 starter foundation",
+  "built_at_utc": "2026-11-17T23:43:28.001381+00:00",
+  "runtime_entry": "index.html",
+  "native_executable": false,
+  "runtime_source_bytes": 63123,
+  "art_implementation": "original shared polygon primitives, code-authored assemblies, generated material atlas, procedural animation",
+  "renderer_origin": "adapted original RSA Studio renderer from this workspace",
+  "reference_images": [
+    {
+      "name": "image(20261117-225135).png",
+      "sha256": "74fde3db6a1ca35c328edbb958cf937b9f9731a6f835e7e016790c2bb5342cf1",
+      "included": false
+    },
+    {
+      "name": "image(20261117-225153).png",
+      "sha256": "c39f02b55b1f3f8503049644be819d45eb66605fadd6e8fbc76d72735633de77",
+      "included": false
+    },
+    {
+      "name": "image(20261117-225215).png",
+      "sha256": "e3160c183a02a43a93c1f5160d854a14b9d78f0a93b9500038e06a0a38a2bcaa",
+      "included": false
+    },
+    {
+      "name": "image(20261117-225233).png",
+      "sha256": "16e66e0613871e0702147485eb452cf728f9988b630b4a7ac2c45d3d43cd72ed",
+      "included": false
+    },
+    {
+      "name": "image(20261117-225320).png",
+      "sha256": "747070e20ac3945666356d1debaf0ffd2159a72c5e1cf402278a925e8eff6c92",
+      "included": false
+    }
+  ],
+  "qa": {
+    "node_tests_passed": 30,
+    "node_tests_failed": 0,
+    "native_graphics": {
+      "graphics": "OpenGL ES 3.2 Mesa 25.0.7-2+deb13u1",
+      "device": "llvmpipe (LLVM 19.1.7, 256 bits)",
+      "shaders": "compiled and linked",
+      "scenes": [
+        {
+          "zone": "home",
+          "nodes": 690,
+          "triangles": 74452,
+          "drawCalls": 10,
+          "glError": 0,
+          "nonemptyPixels": 788819
+        },
+        {
+          "zone": "street",
+          "nodes": 194,
+          "triangles": 23184,
+          "drawCalls": 10,
+          "glError": 0,
+          "nonemptyPixels": 615400
+        }
+      ],
+      "browser": "NOT VERIFIED: browser launch blocked by process socket restriction"
+    },
+    "browser_acceptance": "blocked before page load: process socket restriction",
+    "windows_audio_live_web": "not verified"
+  },
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "bytes": 625,
+      "sha256": "e05a57807b3118994ced3bb0295eec8b25668479300bc22ca8f405545fa740e0"
+    },
+    {
+      "path": "ASSETS.md",
+      "bytes": 2154,
+      "sha256": "ec81eec469ec3b0b2cb6156001a3fcf5d1916c3f44dab47c76ba342142a49a07"
+    },
+    {
+      "path": "BUILD-LICENSING.md",
+      "bytes": 1455,
+      "sha256": "150f77496270b90f2291409103d40e39e9bcbad4f836dcebcd36ec29aa1a3ec8"
+    },
+    {
+      "path": "CLONE_LAW.md",
+      "bytes": 6174,
+      "sha256": "2ccdc3ca9bec65b7e36aaf407246ca8e618282cb5b7c4f7c1f2704ee244cf25a"
+    },
+    {
+      "path": "QA_REPORT.md",
+      "bytes": 4126,
+      "sha256": "b25e30fde547b6591a3401cb06f19879768cdcfeab5a7affd40b1c52acb956b3"
+    },
+    {
+      "path": "README.md",
+      "bytes": 5074,
+      "sha256": "30ecdf858ce7685069f664d2dfa43b28d6c9249875633bcc50ad4f36a8780013"
+    },
+    {
+      "path": "ROADMAP.md",
+      "bytes": 1398,
+      "sha256": "5c6f9b1923f6c1942932f08ebae7678deb9715709e7a4d7806f4b616a22250e5"
+    },
+    {
+      "path": "START-CLONE.cmd",
+      "bytes": 46,
+      "sha256": "7a4cbd71bfec9f3f6d0ec91b2d63f504d360daee20034952661ad17b3b17adf1"
+    },
+    {
+      "path": "index.html",
+      "bytes": 1421,
+      "sha256": "4c9f8afb5518e8ab798a3bf2fbae7cc5e633eb5b1606e29bc665f031441519fb"
+    },
+    {
+      "path": "js/assets.js",
+      "bytes": 8954,
+      "sha256": "df0f3dd50b287332a36fe90c0fcd930398ae234791de24fb232643cf1f328b27"
+    },
+    {
+      "path": "js/core.js",
+      "bytes": 16842,
+      "sha256": "4b9461f401b9b4c4d0f963aea4ebd866b4fd11ce3111c749f57771f5a26c766e"
+    },
+    {
+      "path": "js/game.js",
+      "bytes": 19263,
+      "sha256": "07fc660e660cbec59e9d1bcddc794ef93b13f3546f8838e58c3ac23eefd035e8"
+    },
+    {
+      "path": "js/renderer.js",
+      "bytes": 13505,
+      "sha256": "cfc19c1f43023accdd5c000cd507629e9af7e207f72b50f034a9591a47c5db66"
+    },
+    {
+      "path": "qa/actions/action-log.json",
+      "bytes": 784,
+      "sha256": "832aec450864a485023ff371e9691bdf154a941d52779f050fea934d0c82f9ae"
+    },
+    {
+      "path": "qa/actions/couch-empty-alpha.png",
+      "bytes": 103430,
+      "sha256": "6250fbc3418370d88f3665728949e5d9cf0dff2b348e2a52524f375232c5cc6d"
+    },
+    {
+      "path": "qa/actions/couch-empty-polygon-proof.png",
+      "bytes": 276297,
+      "sha256": "9c84f6c4358b11a8c576b990f1b4a19eb17d555e3e03fbf55fd5e8dbf42afa59"
+    },
+    {
+      "path": "qa/actions/couch-sip-alpha.png",
+      "bytes": 125032,
+      "sha256": "ec14dbb558c2d23ee321fd1f69b8677ee7bc3f7b3ddc8f71eb8decbdb0a8e77b"
+    },
+    {
+      "path": "qa/actions/couch-sip-polygon-proof.png",
+      "bytes": 297957,
+      "sha256": "71a4a472492ea7971fb9e97bf040d7187b3918f6d830dcaa3cda16d5e402cb4d"
+    },
+    {
+      "path": "qa/actions/couch-sit-alpha.png",
+      "bytes": 124699,
+      "sha256": "0de985223577fbd801cd5600233738c1bfbee57f71314c0830c016a27cd6008b"
+    },
+    {
+      "path": "qa/actions/couch-sit-polygon-proof.png",
+      "bytes": 297836,
+      "sha256": "b191969f003745a3eae7c79e52d1011a75d4ad2249f9ecc49b2240f5198515f9"
+    },
+    {
+      "path": "qa/actions/fridge-closed-alpha.png",
+      "bytes": 94300,
+      "sha256": "0404a8f10ee6edfcf36616b5d2ffffb3c1b72cd62553c8b180a670a97d1eaf4f"
+    },
+    {
+      "path": "qa/actions/fridge-closed-polygon-proof.png",
+      "bytes": 263177,
+      "sha256": "c1ca0f38326546c418efdf2d01cc7e31f9c73b9045f4f509ecc4639ed59d94c8"
+    },
+    {
+      "path": "qa/actions/fridge-open-alpha.png",
+      "bytes": 102541,
+      "sha256": "e549cce9cfa0f431f7a5b9b0021f010747b3e2f69e01c7cc6f71f5b417d531e4"
+    },
+    {
+      "path": "qa/actions/fridge-open-polygon-proof.png",
+      "bytes": 270242,
+      "sha256": "aa88402e4ed33eaa54f2b7972e3264bef1b95fff36d760f8975a92df19481eb1"
+    },
+    {
+      "path": "qa/actions/graphics-results.json",
+      "bytes": 1826,
+      "sha256": "18d8ce2a4986ac3d8348cb9659bf587290fefbbbb6bfad9bf5d09a77e683e045"
+    },
+    {
+      "path": "qa/actions/graphics-summary.txt",
+      "bytes": 1826,
+      "sha256": "18d8ce2a4986ac3d8348cb9659bf587290fefbbbb6bfad9bf5d09a77e683e045"
+    },
+    {
+      "path": "qa/actions/runtime-polygons.json",
+      "bytes": 191277,
+      "sha256": "837ba36acf5c8b134a736b80aead2e663ca0445c6adc9fe15f86d7a942b931c5"
+    },
+    {
+      "path": "qa/actions/shower-a-alpha.png",
+      "bytes": 129747,
+      "sha256": "2a879703621d1027b8a2be5c3aafa998a46f7cb02a6e7d80aeb3c4456ffe5095"
+    },
+    {
+      "path": "qa/actions/shower-a-polygon-proof.png",
+      "bytes": 298143,
+      "sha256": "04e0001fb7bc6ad12bf8bb5ad3e9fe5f7ac143bf9c3801355313559ebddc7469"
+    },
+    {
+      "path": "qa/actions/shower-b-alpha.png",
+      "bytes": 129626,
+      "sha256": "a24a468888284ca31f501436f856fc8eb906f624336e40b236faaf635c65f22d"
+    },
+    {
+      "path": "qa/actions/shower-b-polygon-proof.png",
+      "bytes": 298075,
+      "sha256": "ba87713bb44bf0aa05660bdd4611713e8b83a43bd42315164eb840d5440c9302"
+    },
+    {
+      "path": "qa/actions/toilet-flush-a-alpha.png",
+      "bytes": 62156,
+      "sha256": "7be8491ccf541380577e7c2391b533b1ee715ef7528408e076d042f2c2bde614"
+    },
+    {
+      "path": "qa/actions/toilet-flush-a-polygon-proof.png",
+      "bytes": 244697,
+      "sha256": "09827e433058b5389214d44a4cd39d1d54b17c1e403e6e8a00627f352482d572"
+    },
+    {
+      "path": "qa/actions/toilet-flush-b-alpha.png",
+      "bytes": 62107,
+      "sha256": "0309fbcf790689434c5d32b212743d167274d89e3fc288d967201acfd9f2d1f6"
+    },
+    {
+      "path": "qa/actions/toilet-flush-b-polygon-proof.png",
+      "bytes": 244668,
+      "sha256": "3067da44b68a84202b1fffe2190338914ee1fe9a53ba260f87f7bc12994cf2ec"
+    },
+    {
+      "path": "qa/actions/toilet-idle-alpha.png",
+      "bytes": 61908,
+      "sha256": "8052846ca513ebff032d898fce22a4445b2f527411c4baf14c96e889fbd39d41"
+    },
+    {
+      "path": "qa/actions/toilet-idle-polygon-proof.png",
+      "bytes": 244545,
+      "sha256": "e577876acbd4bd2b46e8f2b47f166f7c0eb2522114b241de6d2956d72dd8d864"
+    },
+    {
+      "path": "qa/browser-attempt.txt",
+      "bytes": 4814,
+      "sha256": "30a49885d18819ad2edea8e9727437e74898891fdcfc6217a970cf8c648fc23c"
+    },
+    {
+      "path": "qa/graphics-results.json",
+      "bytes": 553,
+      "sha256": "31f2f1e3d761b6fd2dc51c288dff8949be28bbe6409076ccfbdde071db640205"
+    },
+    {
+      "path": "qa/graphics-summary.txt",
+      "bytes": 553,
+      "sha256": "31f2f1e3d761b6fd2dc51c288dff8949be28bbe6409076ccfbdde071db640205"
+    },
+    {
+      "path": "qa/home-alpha.png",
+      "bytes": 772687,
+      "sha256": "790a752623373e0246a95187b7f31b179c60eb56ae8747e56d9530caf42a78ab"
+    },
+    {
+      "path": "qa/home-polygon-proof.png",
+      "bytes": 850904,
+      "sha256": "6a6e6e6297daeed56faa216191fa590efe5785f58761b0aab525aab6b97cacc7"
+    },
+    {
+      "path": "qa/runtime-polygons.json",
+      "bytes": 292567,
+      "sha256": "9fb1c55fe25fe937e933be83fa4fdfb7492c4c3913e8572f6e26a770d0994369"
+    },
+    {
+      "path": "qa/street-alpha.png",
+      "bytes": 408207,
+      "sha256": "413a2972d17127224e590c9702abf75ae7e76c645fdb88e70490aeed22293636"
+    },
+    {
+      "path": "qa/street-polygon-proof.png",
+      "bytes": 526493,
+      "sha256": "01d87f766d94c002da67100736faf73946ac4ee1d1f7d892bf8af9ab647c9ddb"
+    },
+    {
+      "path": "qa/tests.txt",
+      "bytes": 2773,
+      "sha256": "49992da769ca531af72c3d1cace28f292aa918b8153891aca2a52ef8a94b790c"
+    },
+    {
+      "path": "server.cjs",
+      "bytes": 1673,
+      "sha256": "cab8160638184dfede6bd669c063d3e0352036219f82ec51473adddafd714378"
+    },
+    {
+      "path": "style.css",
+      "bytes": 3138,
+      "sha256": "6006bc9d5556d8d7fa39bfd4706ab747fe8d0a76593c50e725ca7bba22ada4d7"
+    },
+    {
+      "path": "tests/art.test.cjs",
+      "bytes": 2606,
+      "sha256": "1af35dcb09b7127608360800f46b1bc1fd48be6adb79c2cbd1dc34d14787d4e4"
+    },
+    {
+      "path": "tests/core.test.cjs",
+      "bytes": 8011,
+      "sha256": "a27df2d3302ff8157974d0d7dcbfe5591a62a30ddcb86dc450dc6f9f280e29fd"
+    },
+    {
+      "path": "tests/server.test.cjs",
+      "bytes": 793,
+      "sha256": "0c56004e3c1b0cdb1f25ef6d56d71dbc1ee684097202fdb43d7dcb661fae65af"
+    },
+    {
+      "path": "tests/ui.test.cjs",
+      "bytes": 3205,
+      "sha256": "3ceea2ecca93c90a8d65e4339d70cb8b838a09d8d7d9799371f41a21ad0cb3f8"
+    },
+    {
+      "path": "tools/export-actions.cjs",
+      "bytes": 2008,
+      "sha256": "952557fdb6e790daa7247c5b2f802c11ebb996c1d7bd97f0fe11aacd34903bf1"
+    },
+    {
+      "path": "tools/export-proof.cjs",
+      "bytes": 1195,
+      "sha256": "098dd548d8ce3b0594afbc33d4c071146ace0542a0147fa0abd6ba16f1183f5e"
+    },
+    {
+      "path": "tools/verify-render.py",
+      "bytes": 10430,
+      "sha256": "fcef8335a65f876829852e732d4b13d9e49cb4c2f5f95cc385348b5557e7f878"
+    }
+  ]
+}

@@ -19,6 +19,7 @@
   precision highp float;
   in vec3 vPos;in vec3 vNormal;in vec3 vColor;in vec2 vSurface;in vec4 vShadow;
   uniform sampler2D uAtlas;uniform sampler2D uShadow;uniform bool uDepth;uniform float uDay;uniform float uTime;
+  uniform int uLabEnabled;uniform int uLabLighting;uniform float uFilmStrength;uniform float uFilmThickness;uniform float uFilmRoughness;
   uniform vec4 uLamps[4];uniform int uLampCount;
   out vec4 frag;
   float visibility(vec3 n){vec3 p=vShadow.xyz*.5+.5;if(p.x<0.||p.y<0.||p.x>1.||p.y>1.||p.z>1.)return 1.;
@@ -35,10 +36,28 @@
     vec3 L=normalize(vec3(-.6,-.4,1.));float ndl=max(0.,dot(n,L)),sh=visibility(n);
     float hemi=.40+.18*n.z+.035*n.y;float ao=mix(.78,1.,smoothstep(0.,.45,vPos.z));
     vec3 light=vec3(.86,.91,1.)*hemi*ao+vec3(1.16,1.04,.87)*ndl*(.18+.82*sh)*1.45;
-    float metal=kind==4.?1.:0.;vec3 V=normalize(vec3(1.,1.,1.142857)),H=normalize(L+V);
+    float metal=(kind==4.||kind==8.||kind==10.)?1.:0.;vec3 V=normalize(vec3(1.,1.,1.142857)),H=normalize(L+V);
     vec3 spec=vec3(.2+.65*metal)*pow(max(dot(n,H),0.),(kind==2.?12.:mix(38.,110.,metal)))*(.25+.75*sh);
     for(int i=0;i<4;i++){if(i>=uLampCount)break;vec3 delta=uLamps[i].xyz-vPos;float d=length(delta);float local=max(dot(n,delta/max(d,.01)),0.)*uLamps[i].w/(1.+d*d*.7);light+=vec3(1.1,.82,.48)*local;}
     vec3 c=base*light*mix(.57,1.,uDay)+spec*(kind==2.?.06:.25)+base*vSurface.y*1.8;
+    if(uLabEnabled==1){
+      // Thin-film interference approximation. View-angle response is deterministic,
+      // without time-driven psychedelic animation or duplicate texture assets.
+      if(kind>=7.&&kind<=10.){
+        float ndv=clamp(dot(n,V),.025,1.);
+        float thick=uFilmThickness*(kind==7.?1.:kind==8.?.78:kind==9.?1.17:1.43);
+        float path=2.*1.46*thick*ndv;
+        vec3 phase=6.283185*path/vec3(650.,540.,460.)+vec3(.0,.4,.85);
+        vec3 interference=.5+.5*cos(phase);
+        float edge=.08+.92*pow(1.-ndv,5.);
+        float smoothness=1.-clamp(uFilmRoughness,0.,1.);
+        vec3 film=interference*mix(vec3(.32),vec3(1.),smoothness);
+        float weight=clamp(uFilmStrength,0.,1.);
+        vec3 reflected=film*(.35+edge*1.35)+spec*.8;
+        c=mix(c,base*light*.35+reflected+base*vSurface.y*.8,weight);
+      }
+      c*=uLabLighting==1?vec3(.70,.78,1.13):vec3(1.10,.96,.88);
+    }
     c=(c*(2.51*c+.03))/(c*(2.43*c+.59)+.14);c=pow(clamp(c,0.,1.),vec3(1./2.2));frag=vec4(c,1.);
   }`;
   function geometry(kind){
@@ -97,7 +116,7 @@
       const gl=this.gl=this.canvas.getContext('webgl2',{alpha:true,antialias:true,powerPreference:'high-performance',preserveDrawingBuffer:false});if(!gl){this.canvas.remove();throw new Error('WebGL2 is unavailable');}
       const compile=(type,src)=>{const sh=gl.createShader(type);gl.shaderSource(sh,src);gl.compileShader(sh);if(!gl.getShaderParameter(sh,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(sh));return sh;};
       this.program=gl.createProgram();gl.attachShader(this.program,compile(gl.VERTEX_SHADER,VS));gl.attachShader(this.program,compile(gl.FRAGMENT_SHADER,FS));gl.linkProgram(this.program);if(!gl.getProgramParameter(this.program,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(this.program));
-      this.u=Object.fromEntries(['uView','uLight','uDepth','uDay','uAtlas','uShadow','uLamps[0]','uLampCount','uTime'].map(k=>[k,gl.getUniformLocation(this.program,k)]));this.meshes={};
+      this.u=Object.fromEntries(['uView','uLight','uDepth','uDay','uAtlas','uShadow','uLamps[0]','uLampCount','uTime','uLabEnabled','uLabLighting','uFilmStrength','uFilmThickness','uFilmRoughness'].map(k=>[k,gl.getUniformLocation(this.program,k)]));this.meshes={};
       for(const key of ['box','round','soft','cylinder','cone','sphere','leaf']){
         const g=geometry(key),vao=gl.createVertexArray();gl.bindVertexArray(vao);const vb=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,vb);gl.bufferData(gl.ARRAY_BUFFER,g.vertices,gl.STATIC_DRAW);
         gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,3,gl.FLOAT,false,24,0);gl.enableVertexAttribArray(1);gl.vertexAttribPointer(1,3,gl.FLOAT,false,24,12);
@@ -120,7 +139,13 @@
       for(const n of nodes){const m=this.meshes[n.g||'round'];if(m.used>=MAX)throw new Error('3D instance budget exceeded');const off=m.used++*STRIDE;const row=[...n.p,...n.s,...(n.r||[0,0,0]),...n.c,n.m||0,n.e||0];for(let i=0;i<STRIDE;i++){if(Math.abs(m.data[off+i]-row[i])>.000001)dirty=true;m.data[off+i]=row[i];}triangles+=m.triangles;count++;}
       for(const m of Object.values(this.meshes))if(m.used!==m.previous)dirty=true;
       const active=Object.values(this.meshes).filter(m=>m.used);if(dirty)for(const m of active){gl.bindBuffer(gl.ARRAY_BUFFER,m.instances);gl.bufferSubData(gl.ARRAY_BUFFER,0,m.data.subarray(0,m.used*STRIDE));}
-      gl.useProgram(this.program);gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);gl.disable(gl.CULL_FACE);gl.uniformMatrix4fv(this.u.uLight,false,this.light);gl.uniform4f(this.u.uView,2*view.scale/w,-2*view.scale/h,2*view.tx/w-1,1-2*view.ty/h);gl.uniform1f(this.u.uDay,day);gl.uniform1f(this.u.uTime,view.time||0);const ls=new Float32Array(16);lamps.slice(0,4).forEach((l,i)=>ls.set(l,i*4));gl.uniform4fv(this.u['uLamps[0]'],ls);gl.uniform1i(this.u.uLampCount,Math.min(4,lamps.length));
+      gl.useProgram(this.program);gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);gl.disable(gl.CULL_FACE);gl.uniformMatrix4fv(this.u.uLight,false,this.light);gl.uniform4f(this.u.uView,2*view.scale/w,-2*view.scale/h,2*view.tx/w-1,1-2*view.ty/h);gl.uniform1f(this.u.uDay,day);gl.uniform1f(this.u.uTime,view.time||0);
+      const lab=R.iridescenceLab?.snapshot();
+      gl.uniform1i(this.u.uLabEnabled,lab?.enabled?1:0);
+      gl.uniform1i(this.u.uLabLighting,lab?.lighting==='moon'?1:0);
+      gl.uniform1f(this.u.uFilmStrength,lab?.strength??0);
+      gl.uniform1f(this.u.uFilmThickness,lab?.thickness??510);
+      gl.uniform1f(this.u.uFilmRoughness,lab?.roughness??.22);const ls=new Float32Array(16);lamps.slice(0,4).forEach((l,i)=>ls.set(l,i*4));gl.uniform4fv(this.u['uLamps[0]'],ls);gl.uniform1i(this.u.uLampCount,Math.min(4,lamps.length));
       gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,this.atlas);gl.uniform1i(this.u.uAtlas,0);gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,this.atlas);gl.uniform1i(this.u.uShadow,1);
       if(dirty){gl.bindFramebuffer(gl.FRAMEBUFFER,this.fbo);gl.viewport(0,0,2048,2048);gl.clearDepth(1);gl.clear(gl.DEPTH_BUFFER_BIT);gl.uniform1i(this.u.uDepth,1);
       for(const m of active){gl.bindVertexArray(m.vao);gl.drawElementsInstanced(gl.TRIANGLES,m.count,gl.UNSIGNED_SHORT,0,m.used);}this.shadowValid=true;}

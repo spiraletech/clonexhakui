@@ -28,11 +28,11 @@ test('home projection exposes all four materials and does not change world truth
     const beforeMesh=C.art.model(asset);
     const afterMesh=C.iridescenceLab.applyItem(asset,beforeMesh);
     assert.equal(beforeMesh.length,afterMesh.length);
-    for(const [a,b] of afterMesh.entries()){
-      assert.equal(JSON.stringify(a.p),JSON.stringify(beforeMesh[b].p));
-      assert.equal(JSON.stringify(a.s),JSON.stringify(beforeMesh[b].s));
-      assert.equal(JSON.stringify(a.r),JSON.stringify(beforeMesh[b].r));
-      ids.add(a.m);
+    for(const [i,n] of afterMesh.entries()){
+      assert.equal(JSON.stringify(n.p),JSON.stringify(beforeMesh[i].p));
+      assert.equal(JSON.stringify(n.s),JSON.stringify(beforeMesh[i].s));
+      assert.equal(JSON.stringify(n.r),JSON.stringify(beforeMesh[i].r));
+      ids.add(n.m);
     }
   }
   for(const id of [7,8,9,10])assert.ok(ids.has(id),'missing surface '+id);

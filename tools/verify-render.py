@@ -74,6 +74,14 @@ loc = func('glGetUniformLocation', I, U, C.c_char_p)
 uniforms = {k: loc(program, k.encode()) for k in ['uView', 'uLight', 'uDepth', 'uDay', 'uAtlas', 'uShadow', 'uLamps[0]', 'uLampCount']}
 u1i = func('glUniform1i', None, I, I)
 u1f = func('glUniform1f', None, I, F)
+# Experimental material lab: only set on explicit proof fixtures. Baseline remains unchanged.
+if 'lab' in DATA:
+    lab = DATA['lab']
+    u1i(loc(program, b'uLabEnabled'), int(bool(lab.get('enabled', False))))
+    u1i(loc(program, b'uLabLighting'), 1 if lab.get('lighting') == 'moon' else 0)
+    u1f(loc(program, b'uFilmStrength'), float(lab.get('strength', 0.0)))
+    u1f(loc(program, b'uFilmThickness'), float(lab.get('thickness', 510.0)))
+    u1f(loc(program, b'uFilmRoughness'), float(lab.get('roughness', .22)))
 u4f = func('glUniform4f', None, I, F, F, F, F)
 matrix = func('glUniformMatrix4fv', None, I, I, U, P)
 lm = np.array(DATA['light'], dtype='f4')

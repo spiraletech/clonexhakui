@@ -1,0 +1,21 @@
+name: Iridescence 001 experimental regression
+on:
+  push:
+    branches:
+      - experiment/iridescence-001
+  workflow_dispatch:
+jobs:
+  node-regression:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Syntax-check browser modules
+        run: |
+          for file in js/*.js; do node --check "$file"; done
+      - name: Run baseline and material lab tests
+        run: node --test tests/*.test.cjs
